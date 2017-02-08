@@ -1,0 +1,11 @@
+{
+  "manifest_version": 2,
+
+  "name": "First Extension",
+  "description": "A clean UI for a new tab in Chrome",
+  "version": "1.0",
+
+  "chrome_url_overrides" : {
+    "newtab": "templates/index.html"
+  }
+}
