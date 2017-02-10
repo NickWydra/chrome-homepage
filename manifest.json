@@ -7,5 +7,10 @@
 
   "chrome_url_overrides" : {
     "newtab": "templates/index.html"
-  }
+  },
+  
+  "content_scripts": [{
+     "js": ["animate.js"],
+     "matches": ["http://*/*", "https://*/*"]
+   }]
 }
