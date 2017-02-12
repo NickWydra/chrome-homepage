@@ -7,33 +7,47 @@
     window.requestAnimationFrame = requestAnimationFrame;
 })();
 
-  var time = new Date();
-  var minute = time.getMinutes();
-  var hour = time.getHours();
+  var hourCanvas = document.getElementById('hourCanvas');
+  var hourContext = hourCanvas.getContext('2d');
+  var minuteCanvas = document.getElementById('minuteCanvas');
+  var minuteContext = minuteCanvas.getContext('2d');
+  var secondCanvas = document.getElementById('secondCanvas');
+  var secondContext = secondCanvas.getContext('2d');
+
+  var curTime = new Date();
+  var curMin = curTime.getMinutes();
+  var curHour = curTime.getHours() % 12;
+  var curSec = curTime.getSeconds();
  
-  var canvas = document.getElementById('myCanvas');
-  var context = canvas.getContext('2d');
-  var x = canvas.width / 2;
-  var y = canvas.height / 2;
+  // Shouldn't re-declare these each time in animation loop
+  var x = hourCanvas.width / 2;
+  var y = hourCanvas.height / 2;
+
+  // CODE FOR HOUR DISPLAY
+  hourContext.font = "100px Arial";
+  hourContext.textAlign = "center";
+  hourContext.textBaseline = "middle"
+  hourContext.fillText(curHour,x,125);
+
+  // CODE FOR MINUTE DISPLAY
+  var minuteRadius;
+  var minuteWidth;
   var radius = 100;
-  var endPercent = minute / 60 * 100;
+  var endPercent = curMin / 60 * 100;
   var curPerc = 0;
   var counterClockwise = false;
   var circ = Math.PI * 2;
   var quart = Math.PI / 2;
 
-  context.lineWidth = 8;
-  context.strokeStyle = '#ad2323';
-  context.shadowOffsetX = 0;
-  context.shadowOffsetY = 0;
-  context.shadowBlur = 0;
-  context.shadowColor = '#656565';
+  minuteContext.lineWidth = 8;
+  minuteContext.strokeStyle = '#ad2323';
 
   function animate(current) {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.beginPath();
-    context.arc(x, y, radius, -(quart), ((circ) * current) - quart, false);
-    context.stroke();
+    minuteContext.clearRect(0, 0, minuteCanvas.width, minuteCanvas.height);
+    minuteContext.beginPath();
+    // context.arc(center x, center y, radius, startAngle, endAngle, counterclockwise);
+    minuteContext.arc(x, y, radius, -(quart), ((circ) * current) - quart, false);
+    minuteContext.stroke();
     curPerc++;
     if (curPerc < endPercent) {
       requestAnimationFrame(function () {
@@ -44,9 +58,47 @@
 
  animate();
 
- var canvas2 = document.getElementById('myCanvas2');
- var context2 = canvas2.getContext('2d');
- context2.font = "100px Arial";
- context2.textAlign = "center";
- context2.textBaseline = "middle"
- context2.fillText(hour,x,125);
+  // CODE FOR SECOND DISPLAY
+  var secondRadius;
+  var secondWidth;
+
+var startAngle;
+var endAngle;
+var originalComposite = context.globalCompositeOperation;
+
+var currentEndAngle = 0
+var currentStartAngle = 0;
+var color = 'black'; // color can stay black when we erase
+var lineRadius = 75;
+var lineWidth = 15;
+
+setInterval(draw, 50);
+
+
+function draw() { /***************/
+
+    startAngle = currentStartAngle * Math.PI;
+    endAngle = (currentEndAngle) * Math.PI;
+    
+    currentStartAngle = currentEndAngle - 0.01;
+    currentEndAngle = currentEndAngle + 0.01;
+    
+    if (Math.floor(currentStartAngle / 2) % 2) {
+      radius = lineRadius - 1;
+      width = lineWidth + 3;
+      context.globalCompositeOperation = 'destination-out';
+    } else {
+      radius = lineRadius;
+      width = lineWidth;
+      context.globalCompositeOperation = originalComposite;
+    }
+            
+    context.beginPath();
+    context.arc(x, y, radius, startAngle, endAngle, false);
+    context.lineWidth = width;
+    // line color
+    context.strokeStyle = color;
+    context.stroke();
+
+    /************************************************/
+}
