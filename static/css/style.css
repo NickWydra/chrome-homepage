@@ -1,14 +1,18 @@
 canvas {
-    position: absolute; 
-    left: 40%; 
+    position: absolute;
+    left: 40%;
     top: 10%;
 }
 
-#myCanvas {
+#minuteCanvas {
+    z-index: 1;
+}
+
+#secondCanvas {
     z-index: 0;
 }
 
-#myCanvas2 {
-    z-index: 1;
+#hourCanvas {
+    z-index: 2;
     font-size: 100px;
 }
